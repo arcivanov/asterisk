@@ -62,11 +62,12 @@ static void rfc3326_use_reason_header(struct ast_sip_session *session, struct pj
 			/* Safe */
 			/* Build and send the tech-specific cause information */
 			/* size of the string making up the cause code is "SIP " + reason length */
-			data_size += 4 + strlen(cause) + 1;
+			int cause_code_data_size = 4 + strlen(cause) + 1;
+			data_size += cause_code_data_size;
 			cause_code = ast_alloca(data_size);
 			memset(cause_code, 0, data_size);
 			ast_copy_string(cause_code->chan_name, ast_channel_name(session->channel), AST_CHANNEL_NAME);
-			snprintf(cause_code->code, data_size, "SIP %s", cause);
+			snprintf(cause_code->code, cause_code_data_size, "SIP %s", cause);
 
 			cause_code->cause_extended = 1;
 			if (code_q850) {
